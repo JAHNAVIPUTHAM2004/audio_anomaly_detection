@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% block title %}Home • Audio Event Recognition{% endblock %}
+
+{% block content %}
+<div class="space-y-8">
+
+  <!-- HERO -->
+  <div class="rounded-3xl border bg-white p-6 shadow-sm">
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+      <div class="max-w-2xl">
+        <h1 class="text-3xl md:text-4xl font-bold">Realtime Audio Anomoly Detection</h1>
+        
+          
+        </p>
+
+        <div class="mt-5 flex flex-wrap gap-2">
+          <span class="px-3 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-700">MobileNetV2</span>
+          <span class="px-3 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-700">TensorFlow</span>
+          <span class="px-3 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-700">Flask</span>
+          <span class="px-3 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-700">SQLite</span>
+          <span class="px-3 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-700">Realtime Mic</span>
+        </div>
+
+        <div class="mt-6 flex flex-wrap gap-3">
+          {% if current_user.is_authenticated %}
+            <a href="{{ url_for('pages.prediction') }}"
+               class="px-6 py-3 rounded-2xl bg-slate-900 text-white font-semibold hover:bg-slate-800">
+              Start Prediction
+            </a>
+            <a href="{{ url_for('pages.history') }}"
+               class="px-6 py-3 rounded-2xl border bg-white font-semibold hover:bg-slate-50">
+              View History
+            </a>
+          {% else %}
+            <a href="{{ url_for('auth.login') }}"
+               class="px-6 py-3 rounded-2xl bg-slate-900 text-white font-semibold hover:bg-slate-800">
+              Login to Start
+            </a>
+            <a href="{{ url_for('auth.register') }}"
+               class="px-6 py-3 rounded-2xl border bg-white font-semibold hover:bg-slate-50">
+              Create Account
+            </a>
+          {% endif %}
+         
+        </div>
+      </div>
+
+      <!-- HERO IMAGE -->
+      <div class="w-full md:w-[420px]">
+        <div class="rounded-3xl overflow-hidden border bg-slate-50">
+          <img src="{{ url_for('static', filename='img/au1.jpeg') }}"
+               alt="Audio Event Recognition"
+               class="w-full h-64 md:h-72 object-cover">
+        </div>
+        <p class="text-xs text-slate-500 mt-2">
+          Image path: <span class="font-mono">static/img/hero_audio.jpg</span>
+        </p>
+      </div>
+    </div>
+
+    <!-- QUICK FEATURES -->
+    <div class="mt-8 grid md:grid-cols-3 gap-4">
+      <div class="p-4 rounded-2xl border bg-slate-50">
+        <div class="font-semibold">Realtime</div>
+        <div class="text-sm text-slate-600 mt-1">Microphone audio is processed into chunks and predicted instantly.</div>
+      </div>
+      <div class="p-4 rounded-2xl border bg-slate-50">
+        <div class="font-semibold">History</div>
+        <div class="text-sm text-slate-600 mt-1">Save important detections and review them anytime.</div>
+      </div>
+      <div class="p-4 rounded-2xl border bg-slate-50">
+        <div class="font-semibold">Report</div>
+        <div class="text-sm text-slate-600 mt-1">Download CSV reports and view class-wise summary statistics.</div>
+      </div>
+    </div>
+  </div>
+
+ 
+
+    
+
+  
+
+</div>
+{% endblock %}

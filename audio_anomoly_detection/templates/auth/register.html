@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}Register • Audio Event Recognition{% endblock %}
+
+{% block content %}
+<div class="max-w-xl mx-auto rounded-3xl border bg-white p-6 shadow-sm">
+  <h1 class="text-2xl font-bold">Create Account</h1>
+  <p class="text-slate-600 mt-1">Register to save predictions and generate reports.</p>
+
+  <form class="mt-6 space-y-4" method="post" action="{{ url_for('auth.register_post') }}">
+    <div>
+      <label class="text-sm font-medium">Name</label>
+      <input name="name" type="text" required
+             class="mt-1 w-full px-4 py-3 rounded-2xl border bg-slate-50 focus:outline-none focus:ring-2 focus:ring-slate-300">
+    </div>
+    <div>
+      <label class="text-sm font-medium">Email</label>
+      <input name="email" type="email" required
+             class="mt-1 w-full px-4 py-3 rounded-2xl border bg-slate-50 focus:outline-none focus:ring-2 focus:ring-slate-300">
+    </div>
+    <div>
+      <label class="text-sm font-medium">Password</label>
+      <input name="password" type="password" required
+             class="mt-1 w-full px-4 py-3 rounded-2xl border bg-slate-50 focus:outline-none focus:ring-2 focus:ring-slate-300">
+    </div>
+    <div>
+      <label class="text-sm font-medium">Confirm Password</label>
+      <input name="confirm" type="password" required
+             class="mt-1 w-full px-4 py-3 rounded-2xl border bg-slate-50 focus:outline-none focus:ring-2 focus:ring-slate-300">
+    </div>
+
+    <button class="w-full py-3 rounded-2xl bg-slate-900 text-white font-semibold hover:bg-slate-800">
+      Register
+    </button>
+  </form>
+
+  <p class="text-sm text-slate-600 mt-4">
+    Already have an account?
+    <a class="font-semibold text-slate-900 hover:underline" href="{{ url_for('auth.login') }}">Login</a>
+  </p>
+</div>
+{% endblock %}

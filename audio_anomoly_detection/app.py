@@ -1,0 +1,50 @@
+import os
+from flask import Flask, render_template
+from flask_login import LoginManager
+
+from config import Config
+from models import db
+from models.user import User
+
+from routes.auth_routes import auth_bp
+from routes.pages_routes import pages_bp
+from routes.api_routes import api_bp
+
+def create_app():
+    app = Flask(__name__, instance_relative_config=True)
+    app.config.from_object(Config)
+
+    # init db
+    db.init_app(app)
+    with app.app_context():
+        db.create_all()
+
+    # login manager
+    login_manager = LoginManager(app)
+    login_manager.login_view = "auth.login"
+
+    @login_manager.user_loader
+    def load_user(user_id):
+        return User.query.get(int(user_id))
+
+    # blueprints
+    app.register_blueprint(auth_bp)
+    app.register_blueprint(pages_bp)
+    app.register_blueprint(api_bp)
+
+    # errors
+    @app.errorhandler(404)
+    def not_found(e):
+        return render_template("errors/404.html"), 404
+
+    @app.errorhandler(500)
+    def server_error(e):
+        return render_template("errors/500.html"), 500
+
+    return app
+
+app = create_app()
+
+if __name__ == "__main__":
+    # Tip: set FLASK_ENV=development for auto-reload
+    app.run(host="0.0.0.0", port=int(os.environ.get("PORT", "5000")), debug=True)

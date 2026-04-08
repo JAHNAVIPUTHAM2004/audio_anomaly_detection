@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+{% block title %}Prediction • Audio Event Recognition{% endblock %}
+
+{% block content %}
+<div class="rounded-3xl border bg-white p-6 shadow-sm">
+  
+  <h1 class="text-2xl font-bold">Prediction</h1>
+  
+  <!-- Tabs -->
+  <div class="mt-6 flex">
+    <button id="tabLive"
+            class="px-4 py-2 rounded-2xl bg-slate-900 text-white font-semibold">
+      Live Prediction
+    </button>
+
+    <button id="tabMic"
+            class="px-4 py-2 rounded-2xl border bg-white font-semibold hover:bg-slate-50">
+      
+    </button>
+
+    <button id="tabFile"
+            class="px-4 py-2 rounded-2xl border bg-white font-semibold hover:bg-slate-50">
+      
+    </button>
+  </div>
+
+    <!-- MAIN CONTAINER (IMPORTANT) -->
+  <div id="mainContainer" class="flex w-full gap-6 items-stretch transition-all duration-500 mt-6">
+
+    <!-- LEFT: PREDICTION PANEL -->
+    <div id="predictionPanel" class="w-full transition-all duration-500">
+
+  <!-- LIVE PANEL -->
+  <div id="panelLive" class="mt-6">
+    <div class="w-full">
+      <div class="rounded-3xl border bg-white p-6">
+        <h2 class="text-xl font-bold">Live Environment Prediction</h2>
+        <p class="text-slate-600 mt-1">
+          It listens continuously. When sound appears, it automatically predicts and shows the result.
+        </p>
+
+        <div class="mt-6 flex flex-wrap gap-2">
+          <button id="btnLiveStart"
+                  class="px-5 py-3 rounded-2xl bg-emerald-600 text-white font-semibold hover:bg-emerald-700">
+            Start Live
+          </button>
+          <button id="btnLiveStop"
+                  class="px-5 py-3 rounded-2xl bg-rose-600 text-white font-semibold hover:bg-rose-700">
+             Stop
+          </button>
+          <button id="btnLiveSave"
+                  class="px-5 py-3 rounded-2xl border bg-white font-semibold hover:bg-slate-50">
+            Save to History
+          </button>
+        </div>
+
+        <div class="mt-6 p-4 rounded-2xl border bg-slate-50">
+          <div class="text-sm text-slate-600">Live Status</div>
+          <div id="liveStatus" class="font-semibold mt-1">Idle</div>
+          <div class="text-xs text-slate-500 mt-1">
+            Trigger Level (dB): <span id="liveDb">-</span>
+          </div>
+        </div>
+
+        <div class="mt-4 grid grid-cols-2 gap-4">
+          <div class="p-4 rounded-2xl border bg-white">
+            <div class="text-sm text-slate-600">Predicted Class</div>
+            <div id="livePredicted" class="text-xl font-bold mt-1">-</div>
+          </div>
+          <div class="p-4 rounded-2xl border bg-white">
+            <div class="text-sm text-slate-600">Confidence</div>
+            <div id="liveConfidence" class="text-xl font-bold mt-1">-</div>
+          </div>
+        </div>
+
+        <div class="mt-4">
+          <div class="text-sm font-semibold text-slate-700 mb-2">Top-3</div>
+          <div id="liveTop3" class="space-y-2"></div>
+        </div>
+      </div>
+
+      
+      </div>
+    </div>
+  </div>
+  <!-- RIGHT: SOS PANEL -->
+    <div id="sosPanel"
+     class="hidden rounded-3xl border bg-red-600 text-white p-6 flex flex-col items-center justify-center">
+
+  <div class="text-6xl font-bold">🚨 SOS</div>
+
+  <div id="alertText" class="mt-4 text-xl text-center"></div>
+
+  <button onclick="stopAlert()"
+          class="mt-8 px-6 py-3 bg-white text-red-600 font-bold rounded-xl">
+    STOP ALERT
+  </button>
+
+  <audio id="alarmSound"
+         src="{{ url_for('static', filename='sounds/alarm.mp3') }}"
+         loop>
+  </audio>
+
+</div>
+
+  </div>
+
+</div>
+ 
+
+
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/prediction.js') }}"></script>
+<script src="{{ url_for('static', filename='js/prediction_live.js') }}"></script>
+<script src="{{ url_for('static', filename='js/prediction_file.js') }}"></script>
+{% endblock %}

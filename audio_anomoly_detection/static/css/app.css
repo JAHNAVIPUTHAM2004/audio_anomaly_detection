@@ -1,0 +1,40 @@
+/* minimal custom css; Tailwind is via CDN */
+:root { color-scheme: light; }
+
+
+/* ===== SPLIT SCREEN EFFECT ===== */
+.split-active #predictionPanel {
+  width: 50%;
+}
+
+#maincontainer{
+  display:flex;
+  align-items: stretch;
+}
+split-active #sosPanel {
+  display: flex;
+  flex:1;
+}
+
+/* Default (full screen) */
+#predictionPanel {
+  width: 100%;
+  flex:1;
+
+}
+
+/* Smooth transition */
+#predictionPanel, #sosPanel {
+  transition: all 0.5s ease;
+}
+
+/* ===== FLASHING RED SOS ===== */
+@keyframes flashRed {
+  0% { background-color: #dc2626; }
+  50% { background-color: #b91c1c; }
+  100% { background-color: #dc2626; }
+}
+
+#sosPanel {
+  animation: flashRed 1s infinite;
+}
