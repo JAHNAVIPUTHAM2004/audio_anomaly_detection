@@ -1,9 +1,16 @@
+setuptools
+wheel
+pip
+
 flask
 flask_sqlalchemy
 flask_login
 werkzeug
+
 numpy==1.23.5
 librosa==0.10.1
 soundfile
+
 gunicorn
-tensorflow-cpu==2.13.0
+
+tensorflow-cpu==2.12.0
