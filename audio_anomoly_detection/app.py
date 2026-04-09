@@ -47,4 +47,4 @@ app = create_app()
 
 if __name__ == "__main__":
     # Tip: set FLASK_ENV=development for auto-reload
-    app.run(host="0.0.0.0", port=int(os.environ.get("PORT", "5000")), debug=True)
+    app.run(debug=True)
