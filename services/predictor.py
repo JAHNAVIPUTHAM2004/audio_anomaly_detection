@@ -3,6 +3,7 @@ import json
 import numpy as np
 import tensorflow as tf
 
+from tensorflow.keras.models import load_model
 from .audio_features import audio_to_img_from_samples, decode_audio_bytes
 
 
@@ -15,7 +16,7 @@ class AudioEventPredictor:
         duration: float,
         n_mels: int,
         img_size: int,
-        upload_dir: str,  # kept for compatibility, not used now
+        upload_dir: str,
     ):
         self.model_path = model_path
         self.class_names_path = class_names_path
@@ -29,13 +30,25 @@ class AudioEventPredictor:
         self.class_names = None
 
     def load(self):
+        
         if self.model is None:
             if not os.path.exists(self.model_path):
                 raise FileNotFoundError(
                     f"Model not found at {self.model_path}. Put FINAL_audio_event_model.keras in project root."
                 )
-            self.model = tf.keras.models.load_model(self.model_path)
 
+            try:
+                self.model = load_model(
+                    self.model_path,
+                    compile=False,
+                    safe_mode=False
+                )
+                print(" Predictor model loaded successfully")
+            except Exception as e:
+                print(" Predictor model loading failed:", e)
+                raise e
+
+        
         if self.class_names is None:
             if not os.path.exists(self.class_names_path):
                 raise FileNotFoundError(
@@ -47,19 +60,13 @@ class AudioEventPredictor:
         return self
 
     def _bytes_to_waveform(self, audio_bytes: bytes, mimetype: str | None) -> np.ndarray:
-        """
-        Updated: WAV-only decoding (Frontend sends audio/wav chunks)
-        - Decodes using soundfile via decode_audio_bytes()
-        """
         try:
             y = decode_audio_bytes(audio_bytes, self.sr)
         except Exception as e:
             raise RuntimeError(
-                "Audio decoding failed. Ensure frontend sends WAV (audio/wav). "
-                "Replace prediction.js with WAV streaming version."
+                "Audio decoding failed. Ensure frontend sends WAV (audio/wav)."
             ) from e
 
-        # ensure float32 mono
         y = np.asarray(y, dtype=np.float32)
         if y.ndim > 1:
             y = np.mean(y, axis=-1).astype(np.float32)
@@ -70,6 +77,7 @@ class AudioEventPredictor:
         self.load()
 
         y = self._bytes_to_waveform(audio_bytes, mimetype)
+
         img = audio_to_img_from_samples(
             y,
             sr=self.sr,
@@ -77,7 +85,8 @@ class AudioEventPredictor:
             n_mels=self.n_mels,
             img_size=self.img_size,
         )
-        x = np.expand_dims(img, axis=0)  # (1, H, W, 3)
+
+        x = np.expand_dims(img, axis=0)
 
         probs = self.model.predict(x, verbose=0)[0].astype(float)
         top_idx = int(np.argmax(probs))

@@ -25,7 +25,7 @@ def get_predictor() -> AudioEventPredictor:
 @api_bp.post("/predict-chunk")
 @login_required
 def predict_chunk():
-    # expects multipart/form-data with file field "audio"
+    
     if "audio" not in request.files:
         return jsonify({"ok": False, "error": "Missing audio file field 'audio'"}), 400
 

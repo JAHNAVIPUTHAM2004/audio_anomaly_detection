@@ -10,16 +10,29 @@ from routes.auth_routes import auth_bp
 from routes.pages_routes import pages_bp
 from routes.api_routes import api_bp
 
+
 def create_app():
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_object(Config)
 
-    # init db
+    
+    from tensorflow.keras.models import load_model
+    try:
+        app.model = load_model(
+            "FINAL_audio_event_model.keras",
+            compile=False,
+            safe_mode=False
+        )
+        print(" Model loaded successfully")
+    except Exception as e:
+        print(" Model loading failed:", e)
+
+   
     db.init_app(app)
     with app.app_context():
         db.create_all()
 
-    # login manager
+  
     login_manager = LoginManager(app)
     login_manager.login_view = "auth.login"
 
@@ -27,12 +40,12 @@ def create_app():
     def load_user(user_id):
         return User.query.get(int(user_id))
 
-    # blueprints
+  
     app.register_blueprint(auth_bp)
     app.register_blueprint(pages_bp)
     app.register_blueprint(api_bp)
 
-    # errors
+  
     @app.errorhandler(404)
     def not_found(e):
         return render_template("errors/404.html"), 404
@@ -43,8 +56,8 @@ def create_app():
 
     return app
 
+
 app = create_app()
 
 if __name__ == "__main__":
-    # Tip: set FLASK_ENV=development for auto-reload
     app.run(debug=True)
